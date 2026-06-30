@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zzy6868.github.io/snp/sitemap-index.xml

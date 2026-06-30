@@ -1,0 +1,31 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import PostLayout from "../../layouts/PostLayout.astro";
+import { getPublishedPosts, getHeadings, getAdjacentPosts } from "../../utils";
+import type { Post } from "../../utils";
+
+export async function getStaticPaths() {
+  const posts = await getCollection(
+    "posts",
+    (entry: CollectionEntry<"posts">) => {
+      return import.meta.env.PROD ? !entry.data.draft : true;
+    },
+  );
+  return posts.map((post: CollectionEntry<"posts">) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props as { post: Post };
+
+if (!post) {
+  return Astro.redirect("/404");
+}
+
+const allPosts = await getPublishedPosts();
+const { prev, next } = getAdjacentPosts(allPosts, post.slug);
+const headings = post.body ? getHeadings(post.body) : [];
+---
+
+<PostLayout post={post} headings={headings} prev={prev} next={next} />

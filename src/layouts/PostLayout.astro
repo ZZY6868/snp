@@ -1,0 +1,90 @@
+---
+import type { Post } from "../utils";
+import BaseLayout from "./BaseLayout.astro";
+import TOC from "../components/TOC.astro";
+
+export interface Props {
+  post: Post;
+  headings: { depth: number; text: string; slug: string }[];
+  prev: Post | null;
+  next: Post | null;
+}
+
+const { post, headings, prev, next } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, category, author } =
+  post.data;
+
+const { Content } = await post.render();
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalURL={new URL(`/blog/${post.slug}`, Astro.site).href}
+  ogType="article"
+>
+  <article>
+    <header class="post-header">
+      <h1>{title}</h1>
+      <div class="post-meta">
+        <time datetime={pubDate.toISOString().split("T")[0]}>
+          {pubDate.toISOString().split("T")[0]}
+        </time>
+        {updatedDate && updatedDate > pubDate && (
+          <>
+            <span aria-hidden="true"> &middot; </span>
+            <span
+              >Updated: <time datetime={updatedDate.toISOString().split("T")[0]}
+              >{updatedDate.toISOString().split("T")[0]}</time></span
+            >
+          </>
+        )}
+        {author && (
+          <>
+            <span aria-hidden="true"> &middot; </span>
+            <span>{author}</span>
+          </>
+        )}
+      </div>
+      {category && (
+        <div class="tag-list">
+          <a class="tag" href={`/categories/${category}`}>{category}</a>
+        </div>
+      )}
+      {tags.length > 0 && (
+        <div class="tag-list">
+          {tags.map((tag: string) => <a class="tag" href={`/tags/${tag}`}>{tag}</a>)}
+        </div>
+      )}
+    </header>
+
+    <TOC headings={headings} />
+
+    <div class="post-body">
+      <Content />
+    </div>
+
+    <nav class="post-nav" aria-label="Post navigation">
+      <div>
+        {prev && (
+          <a href={`/blog/${prev.slug}`} rel="prev">
+            <div class="post-nav-label">&larr; Previous</div>
+            <div class="post-nav-title">{prev.data.title}</div>
+          </a>
+        )}
+      </div>
+      <div style="text-align: right;">
+        {next && (
+          <a href={`/blog/${next.slug}`} rel="next">
+            <div class="post-nav-label">Next &rarr;</div>
+            <div class="post-nav-title">{next.data.title}</div>
+          </a>
+        )}
+      </div>
+    </nav>
+
+    <p style="margin-top: 2rem;">
+      <a href="/blog">&larr; Back to all posts</a>
+    </p>
+  </article>
+</BaseLayout>

@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getPublishedPosts, groupPostsByYearMonth } from "../utils";
+
+const posts = await getPublishedPosts();
+const archive = groupPostsByYearMonth(posts);
+
+const monthNames = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+---
+
+<BaseLayout
+  title="Archive"
+  description="All posts organized by date"
+  canonicalURL={new URL("/archive/", Astro.site).href}
+>
+  <h1>Archive</h1>
+
+  {
+    archive.length === 0 && (
+      <p>No posts yet.</p>
+    )
+  }
+
+  {archive.map(({ year, months }) => (
+    <section>
+      <h2 class="archive-year">{year}</h2>
+      {months.map(({ month, posts: monthPosts }) => (
+        <div>
+          <h3 class="archive-month">{monthNames[month - 1]}</h3>
+          <ul class="archive-list">
+            {monthPosts.map((post) => (
+              <li>
+                <span class="archive-date">
+                  {post.data.pubDate.toISOString().split("T")[0]}
+                </span>
+                <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </section>
+  ))}
+</BaseLayout>

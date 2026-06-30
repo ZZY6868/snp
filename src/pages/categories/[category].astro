@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import {
+  getPublishedPosts,
+  getCategoriesWithCount,
+  filterPostsByCategory,
+} from "../../utils";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  const categories = getCategoriesWithCount(posts);
+  return categories.map(({ category }) => ({
+    params: { category },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.params;
+const allPosts = await getPublishedPosts();
+const posts = filterPostsByCategory(allPosts, category!);
+---
+
+<BaseLayout
+  title={`Category: ${category}`}
+  description={`Posts in category "${category}"`}
+  canonicalURL={new URL(`/categories/${category}`, Astro.site).href}
+>
+  <h1>Category: {category}</h1>
+  <p>{posts.length} post{posts.length !== 1 ? "s" : ""}</p>
+
+  {posts.map((post) => <PostCard post={post} />)}
+
+  <p style="margin-top: 2rem;">
+    <a href="/categories">&larr; All categories</a>
+  </p>
+</BaseLayout>

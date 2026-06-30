@@ -1,0 +1,36 @@
+---
+import type { Post } from "../utils";
+
+export interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, tags } = post.data;
+const href = `/blog/${post.slug}`;
+---
+
+<article class="post-card">
+  <h2 class="post-card-title">
+    <a href={href}>{title}</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime={pubDate.toISOString().split("T")[0]}>
+      {pubDate.toISOString().split("T")[0]}
+    </time>
+    {post.data.category && (
+      <>
+        <span aria-hidden="true"> &middot; </span>
+        <a href={`/categories/${post.data.category}`}>{post.data.category}</a>
+      </>
+    )}
+  </div>
+  {description && <p class="post-card-desc">{description}</p>}
+  {
+    tags.length > 0 && (
+      <div class="tag-list">
+        {tags.map((tag: string) => <a class="tag" href={`/tags/${tag}`}>{tag}</a>)}
+      </div>
+    )
+  }
+</article>

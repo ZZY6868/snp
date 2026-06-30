@@ -1,0 +1,66 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/PostCard.astro";
+import { getPublishedPosts, getTagsWithCount } from "../utils";
+import { SITE_CONFIG } from "../site.config";
+
+const posts = await getPublishedPosts();
+const latestPosts = posts.slice(0, 5);
+const tags = getTagsWithCount(posts);
+---
+
+<BaseLayout>
+  <section class="intro">
+    <h1>{SITE_CONFIG.title}</h1>
+    <p>{SITE_CONFIG.description}</p>
+  </section>
+
+  <!-- Latest Posts -->
+  <section>
+    <h2 class="section-title">Latest Posts</h2>
+    {
+      latestPosts.length === 0 && (
+        <p>No posts yet. <a href="/blog">View all posts</a>.</p>
+      )
+    }
+    {latestPosts.map((post) => <PostCard post={post} />)}
+    {posts.length > 5 && (
+      <p style="margin-top: 1rem;">
+        <a href="/blog">View all {posts.length} posts &rarr;</a>
+      </p>
+    )}
+  </section>
+
+  <!-- Tags -->
+  {
+    tags.length > 0 && (
+      <section>
+        <h2 class="section-title">Tags</h2>
+        <div class="tag-cloud">
+          {tags.map(({ tag, count }) => (
+            <a class="tag" href={`/tags/${tag}`}>{tag} ({count})</a>
+          ))}
+        </div>
+        <p style="margin-top: 0.5rem;">
+          <a href="/tags">Browse all tags &rarr;</a>
+        </p>
+      </section>
+    )
+  }
+
+  <!-- Archive link -->
+  <section>
+    <h2 class="section-title">Archive</h2>
+    <p>
+      <a href="/archive">Browse the archive by year and month &rarr;</a>
+    </p>
+  </section>
+
+  <!-- RSS -->
+  <section>
+    <h2 class="section-title">Subscribe</h2>
+    <p>
+      <a href="/rss.xml">RSS Feed</a>
+    </p>
+  </section>
+</BaseLayout>

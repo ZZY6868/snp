@@ -1,0 +1,50 @@
+---
+import { SITE_CONFIG } from "../site.config";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  canonicalURL?: string;
+  ogType?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = SITE_CONFIG.description,
+  canonicalURL,
+  ogType = "website",
+  ogImage,
+} = Astro.props;
+
+const siteUrl = Astro.site ?? new URL(SITE_CONFIG.url);
+const seoTitle = title ? `${title} — ${SITE_CONFIG.title}` : SITE_CONFIG.title;
+const url = canonicalURL ? new URL(canonicalURL, siteUrl).href : siteUrl.href;
+const baseUrl = siteUrl.origin;
+---
+
+<!-- Primary Meta -->
+<title>{seoTitle}</title>
+<meta name="description" content={description} />
+<meta name="author" content={SITE_CONFIG.author} />
+<link rel="canonical" href={url} />
+
+<!-- Open Graph -->
+<meta property="og:title" content={seoTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={url} />
+<meta property="og:site_name" content={SITE_CONFIG.title} />
+<meta property="og:locale" content={SITE_CONFIG.lang} />
+{ogImage && <meta property="og:image" content={new URL(ogImage, baseUrl).href} />}
+
+<!-- RSS -->
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={`${SITE_CONFIG.title} RSS`}
+  href={new URL("/rss.xml", baseUrl).href}
+/>
+
+<!-- Sitemap -->
+<link rel="sitemap" type="application/xml" href={new URL("/sitemap-index.xml", baseUrl).href} />
