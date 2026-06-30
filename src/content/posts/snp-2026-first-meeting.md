@@ -17,7 +17,7 @@ draft: false
 
 会晤的序幕在一间明亮的 KFC 餐厅拉开。
 
-![KFC 会晤现场](/snp/images/posts/snp-meeting-2.jpeg)
+![KFC 会晤现场](./images/snp-meeting-2.jpeg)
 
 一如既往，组织的两位核心成员——**思想先驱**与**技术美食大家**——于此开始了新一轮的思想碰撞。餐桌上，一份三堡加小食套餐成为本次交流的首个"研究对象"。
 
