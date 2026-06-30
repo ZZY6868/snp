@@ -197,10 +197,19 @@ th {
   font-weight: 700;
   color: var(--color-text);
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 .site-title:hover {
   text-decoration: none;
   color: var(--color-accent);
+}
+.site-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
 }
 .site-nav {
   display: flex;
