@@ -16,6 +16,7 @@ export async function getStaticPaths() {
   }));
 }
 
+const base = import.meta.env.BASE_URL;
 const { category } = Astro.params;
 const allPosts = await getPublishedPosts();
 const posts = filterPostsByCategory(allPosts, category!);
@@ -32,6 +33,6 @@ const posts = filterPostsByCategory(allPosts, category!);
   {posts.map((post) => <PostCard post={post} />)}
 
   <p style="margin-top: 2rem;">
-    <a href="/categories">&larr; All categories</a>
+    <a href={`${base}categories`}>&larr; All categories</a>
   </p>
 </BaseLayout>

@@ -5,9 +5,10 @@ export interface Props {
   post: Post;
 }
 
+const base = import.meta.env.BASE_URL;
 const { post } = Astro.props;
 const { title, description, pubDate, tags } = post.data;
-const href = `/blog/${post.slug}`;
+const href = `${base}blog/${post.slug}`;
 ---
 
 <article class="post-card">
@@ -21,7 +22,7 @@ const href = `/blog/${post.slug}`;
     {post.data.category && (
       <>
         <span aria-hidden="true"> &middot; </span>
-        <a href={`/categories/${post.data.category}`}>{post.data.category}</a>
+        <a href={`${base}categories/${post.data.category}`}>{post.data.category}</a>
       </>
     )}
   </div>
@@ -29,7 +30,7 @@ const href = `/blog/${post.slug}`;
   {
     tags.length > 0 && (
       <div class="tag-list">
-        {tags.map((tag: string) => <a class="tag" href={`/tags/${tag}`}>{tag}</a>)}
+        {tags.map((tag: string) => <a class="tag" href={`${base}tags/${tag}`}>{tag}</a>)}
       </div>
     )
   }

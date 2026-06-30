@@ -10,6 +10,7 @@ export interface Props {
   next: Post | null;
 }
 
+const base = import.meta.env.BASE_URL;
 const { post, headings, prev, next } = Astro.props;
 const { title, description, pubDate, updatedDate, tags, category, author } =
   post.data;
@@ -48,12 +49,12 @@ const { Content } = await post.render();
       </div>
       {category && (
         <div class="tag-list">
-          <a class="tag" href={`/categories/${category}`}>{category}</a>
+          <a class="tag" href={`${base}categories/${category}`}>{category}</a>
         </div>
       )}
       {tags.length > 0 && (
         <div class="tag-list">
-          {tags.map((tag: string) => <a class="tag" href={`/tags/${tag}`}>{tag}</a>)}
+          {tags.map((tag: string) => <a class="tag" href={`${base}tags/${tag}`}>{tag}</a>)}
         </div>
       )}
     </header>
@@ -67,7 +68,7 @@ const { Content } = await post.render();
     <nav class="post-nav" aria-label="Post navigation">
       <div>
         {prev && (
-          <a href={`/blog/${prev.slug}`} rel="prev">
+          <a href={`${base}blog/${prev.slug}`} rel="prev">
             <div class="post-nav-label">&larr; Previous</div>
             <div class="post-nav-title">{prev.data.title}</div>
           </a>
@@ -75,7 +76,7 @@ const { Content } = await post.render();
       </div>
       <div style="text-align: right;">
         {next && (
-          <a href={`/blog/${next.slug}`} rel="next">
+          <a href={`${base}blog/${next.slug}`} rel="next">
             <div class="post-nav-label">Next &rarr;</div>
             <div class="post-nav-title">{next.data.title}</div>
           </a>
@@ -84,7 +85,7 @@ const { Content } = await post.render();
     </nav>
 
     <p style="margin-top: 2rem;">
-      <a href="/blog">&larr; Back to all posts</a>
+      <a href={`${base}blog`}>&larr; Back to all posts</a>
     </p>
   </article>
 </BaseLayout>
