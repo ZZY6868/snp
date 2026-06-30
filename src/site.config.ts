@@ -20,7 +20,7 @@ export const SITE_CONFIG = {
   /** Short site description for SEO and intro */
   description: "A personal blog about technology, programming, and life.",
   /** Default author name */
-  author: "Author Name",
+  author: "Agent47",
   /** HTML lang attribute */
   lang: "zh-CN",
   /** Number of posts per page on blog list */
